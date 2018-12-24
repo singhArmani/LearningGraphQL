@@ -1,0 +1,1 @@
+export const UPDATE_LINKS = 'UPDATE_LINKS';

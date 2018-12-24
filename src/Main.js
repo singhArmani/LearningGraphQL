@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import * as LinkActions from './actions';
+
 import linkApi from './services/api/linkAPI';
 
 export default class Main extends Component {
@@ -13,6 +15,7 @@ export default class Main extends Component {
     try{
       const response = await linkApi.getLinks();
       // const links = await response.json();
+      LinkActions.updateLinks(response.data);
       this.setState({
         links: response.data,
         isFetchingLinks: false
