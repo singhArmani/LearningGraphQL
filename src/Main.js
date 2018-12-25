@@ -1,29 +1,35 @@
 import React, { Component } from 'react'
 
-import * as LinkActions from './actions';
+import LinkStore from './stores/linkStore';
 
 import linkApi from './services/api/linkAPI';
 
+
+let _getAppState = () => {
+  return { links: LinkStore.getAll() };
+}
 export default class Main extends Component {
 
-  state = {
-    links: null,
-    isFetchingLinks: true,
-    errorFetchingLinks: false
+  constructor(props) {
+    super(props);
+
+    this.state = _getAppState();
   }
-  async componentDidMount() {
-    try{
-      const response = await linkApi.getLinks();
-      // const links = await response.json();
-      LinkActions.updateLinks(response.data);
-      this.setState({
-        links: response.data,
-        isFetchingLinks: false
-      })
-    } catch(err) {
-      console.log(err)
-    }
+
+  componentDidMount() {
+    linkApi.getLinks();
+    LinkStore.on('change', this.onChange)
   }
+
+  componentWillUnmount(){
+    LinkStore.removeListener('change', this.onChange);
+  }
+
+  onChange = () => {
+    this.setState(_getAppState);
+  }
+
+
   render() {
     const { links, isFetchingLinks } = this.state;
     if(isFetchingLinks) {
@@ -33,7 +39,7 @@ export default class Main extends Component {
       <>
         <h3>Links</h3>
         <ul>
-          {this.state.links.map(el => <li key={el._id}>{el.title} - {el.url}</li>)}
+          {this.state.links.map(el => <li key={el._id}><a href={el.url}>{el.title}</a></li>)}
         </ul>
       </>
     )

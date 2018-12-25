@@ -1,9 +1,12 @@
 import APIUtil from '../api';
 
+import * as LinkActions from '../../actions';
+
 const api = new APIUtil();
 class LinkAPI {
-    getLinks(){
-        return api.get('data/links');
+    async getLinks(){
+        const response =  await api.get('data/links');
+        LinkActions.updateLinks(response.data);
     }
 }
 
