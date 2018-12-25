@@ -5,8 +5,17 @@ import * as LinkActions from '../../actions';
 const api = new APIUtil();
 class LinkAPI {
     async getLinks(){
-        const response =  await api.get('data/links');
-        LinkActions.updateLinks(response.data);
+        const response =  await api.post('graphql',
+            { 
+                query: 
+                  `{links {
+                    _id,
+                    title,
+                    url
+                    }
+                  }`
+        });
+        LinkActions.updateLinks(response.data.data.links);
     }
 }
 

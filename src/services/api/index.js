@@ -12,7 +12,7 @@ export default class APIUtil {
     }
 
     post(endpoint, data, config = {}){
-        return axios.get(`${this.host}/${endpoint}`, data, config);
+        return axios.post(`${this.host}/${endpoint}`, data, config);
     }
 
 }
