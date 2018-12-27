@@ -31,15 +31,12 @@ export default class Main extends Component {
 
 
   render() {
-    const { links, isFetchingLinks } = this.state;
-    if(isFetchingLinks) {
-      return <h3>Fetching Links ...</h3>
-    }
+    const { links } = this.state;
     return (
       <>
         <h3>Links</h3>
         <ul>
-          {this.state.links.map(el => <li key={el._id}><a href={el.url}>{el.title}</a></li>)}
+          {links.map(el => <li key={el._id}><a href={el.url}>{el.title}</a></li>)}
         </ul>
       </>
     )
