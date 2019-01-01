@@ -12,8 +12,9 @@ ObjectId.prototype.valueOf = function () {
 	return this.toString();
 };
 
+
 const linkType = new GraphQLObjectType({
-    name: 'Counter',
+    name: 'link',
     fields: () => ({
         _id: {
             type: GraphQLString
@@ -28,13 +29,24 @@ const linkType = new GraphQLObjectType({
 })
 
 export const Schema = db => {
+    let store = {};
+    const storeType = new GraphQLObjectType({
+        name: 'Store',
+        fields: () => ({
+            links: {
+            type: new GraphQLList(linkType),
+            resolve: () => db.collection('links').find({}).toArray()
+            }
+        })
+    });
+
     return new GraphQLSchema({
         query: new GraphQLObjectType({
             name: 'Query',
             fields: () => ({
-                links: {
-                    type: new GraphQLList(linkType),
-                    resolve: () => db.collection('links').find({}).toArray()
+                store: {
+                    type: storeType,
+                    resolve: () => store
                 }
             }) 
         })
